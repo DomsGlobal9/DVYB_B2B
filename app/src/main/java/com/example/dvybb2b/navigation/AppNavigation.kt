@@ -7,12 +7,17 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.example.dvyb.ui.theme.components.screens.login.LoginScreen
+import com.example.dvyb.ui.theme.components.screens.login.PasswordResetScreen
 import com.example.dvyb.ui.theme.components.screens.splash.SplashScreen
+import com.example.dvyb.ui.theme.home.HomeScreen
+import com.example.dvyb2b2.ui.dashboard.DashboardScreen
+import com.example.dvybb2b.home.products.RecentlyAddedProductsScreen
+import com.example.dvybb2b.screens.dashboardComponents.InventoryScreen
 import com.example.dvybb2b.screens.OtpEntryScreen
 import com.example.dvybb2b.screens.Register.RegisterBankDetailsScreen
 import com.example.dvybb2b.screens.Register.RegisterPasswordScreen
 import com.example.dvybb2b.ui.theme.screens.onboarding.OnboardingScreen
-import com.example.dvybb2b.ui.theme.screens.login.LoginScreen
 import com.example.dvybb2b.ui.theme.screens.register.RegisterPersonalDetails
 import com.example.dvybb2b.ui.theme.screens.register.RegisterShopDetailsScreen
 
@@ -27,7 +32,8 @@ fun AppNavigation(navController: NavHostController) {
             val step = it.arguments?.getInt("step") ?: 0
             OnboardingScreen(navController, step) }
         composable("login") { LoginScreen(navController) }
-//      composable("forgot_password") { PasswordResetScreen(navController) }
+        composable("forgot_password") { PasswordResetScreen(navController) }
+        composable("home") { HomeScreen() }
         composable("registerDetails") { RegisterPersonalDetails(navController) }
         composable("shopDetails"){ RegisterShopDetailsScreen(navController)}
         composable("bankDetails"){ RegisterBankDetailsScreen(navController,  onHelp = { /* handle help */ }) }

@@ -27,7 +27,7 @@ fun VendorPreferencesScreen() {
     ) {
         // Background Image
         Image(
-            painter = painterResource(id = R.drawable.loginbg),
+            painter = painterResource(id = R.drawable.bg_top),
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = Modifier.matchParentSize()

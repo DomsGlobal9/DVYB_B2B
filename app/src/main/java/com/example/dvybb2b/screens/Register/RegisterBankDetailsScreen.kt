@@ -61,7 +61,7 @@ data class ValidationErrors(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RegisterBankDetailsScreen(
-   navController: NavController,
+    navController: NavController,
     onHelp: () -> Unit = {}
 ) {
     var bankDetailsState by remember { mutableStateOf(BankDetailsState()) }
@@ -76,7 +76,7 @@ fun RegisterBankDetailsScreen(
     ) {
         // Background Image
         Image(
-            painter = painterResource(id = R.drawable.loginbg),
+            painter = painterResource(id = R.drawable.bg_top),
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = Modifier.matchParentSize()

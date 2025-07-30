@@ -35,8 +35,8 @@ fun OnboardingScreen(navController: NavHostController, step: Int) {
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp),
-//        verticalArrangement = Arrangement.SpaceBetween
-        verticalArrangement = Arrangement.Top
+        verticalArrangement = Arrangement.SpaceBetween
+//        verticalArrangement = Arrangement.Top
 
     ) {
         Spacer(modifier = Modifier.height(30.dp)) // Small spacing between texts
