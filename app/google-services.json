@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "288498435019",
+    "project_id": "dvyb-8b572",
+    "storage_bucket": "dvyb-8b572.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:288498435019:android:94c3dd7a647e6ee3ad6c4e",
+        "android_client_info": {
+          "package_name": "com.example.digi_wearhouse"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD4PxXe37UCT1RmKUfsrMiYdli2TSGWaZ0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:288498435019:android:4778f3886fdcd35bad6c4e",
+        "android_client_info": {
+          "package_name": "com.example.dvybb2b"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD4PxXe37UCT1RmKUfsrMiYdli2TSGWaZ0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

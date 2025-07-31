@@ -1,7 +1,8 @@
 package com.example.dvyb.ui.theme.home.orders
 
-import OrdersViewModel
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -16,11 +17,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.dvybb2b.R
 import com.example.dvyb.ui.theme.home.orders.model.Order
 
 @Composable
@@ -39,7 +44,7 @@ fun OrdersScreen(navController: NavController, viewModel: OrdersViewModel = view
             "Shipped" -> order.tracking.isShipped && !order.tracking.isDelivered
             "Delivered" -> order.tracking.isDelivered
             "Pending" -> !order.tracking.isShipped
-            "Canceled" -> false // Add canceled logic if needed
+            "Canceled" -> false
             else -> true
         }
         matchesSearch && matchesCategory
@@ -51,7 +56,7 @@ fun OrdersScreen(navController: NavController, viewModel: OrdersViewModel = view
             .background(Color.White)
             .padding(16.dp)
     ) {
-        // 🔍 Search Bar
+        // Search Bar
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -100,16 +105,23 @@ fun OrdersScreen(navController: NavController, viewModel: OrdersViewModel = view
                 Tab(
                     selected = isSelected,
                     onClick = { selectedCategory = category }
-                ) {
+                )
+                {
                     Box(
                         modifier = Modifier
+                            .width(100.dp)
                             .padding(vertical = 8.dp, horizontal = 4.dp)
+                            .border(
+                                width = 1.dp,
+                                color = Color.Gray, // Add a color here
+                                shape = RoundedCornerShape(6.dp)
+                            )
                             .clip(RoundedCornerShape(6.dp))
                             .background(
                                 when {
                                     isSelected && category == "Canceled" -> Color.Red
-                                    isSelected -> Color(0xFF0E9FF2)
-                                    else -> Color(0xFFF2F2F2)
+                                    (isSelected) ->Color(0xFF7DBBD1)
+                                    else -> Color(0xFFFFFFFF)
                                 }
                             )
                             .padding(horizontal = 12.dp, vertical = 6.dp)
@@ -117,7 +129,8 @@ fun OrdersScreen(navController: NavController, viewModel: OrdersViewModel = view
                         Text(
                             text = category,
                             color = if (isSelected) Color.White else Color.Black,
-                            fontSize = 14.sp
+                            fontSize = 14.sp,
+                            maxLines = 1
                         )
                     }
                 }
@@ -126,11 +139,40 @@ fun OrdersScreen(navController: NavController, viewModel: OrdersViewModel = view
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-            filteredOrders.forEach { order ->
-                OrderCard(order = order, onClick = {
-                    navController.navigate("orderDetails/${order.orderId}")
-                })
+        if (filteredOrders.isEmpty()) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    Text(
+                        text = "Looks like you don't have \n any Order yet!",
+                        fontSize = 18.sp, // Changed from dp to sp for text sizing
+                        color = Color.Black,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.padding(8.dp) // Added padding for better spacing
+                    )
+
+                    Image(
+                        painter = painterResource(id = R.drawable.order_empty_fallback),
+                        contentDescription = "Empty orders",
+                        modifier = Modifier.size(340.dp),
+                        contentScale = ContentScale.Fit
+                    )
+                }
+            }
+        } else {
+            Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                filteredOrders.forEach { order ->
+                    OrderCard(order = order) {
+                        navController.navigate("orderDetails/${order.orderId}")
+                    }
+                }
             }
         }
     }
@@ -138,15 +180,12 @@ fun OrdersScreen(navController: NavController, viewModel: OrdersViewModel = view
 
 @Composable
 fun OrderCard(order: Order, onClick: () -> Unit) {
-
-
     Box(
-
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(12.dp))
             .background(Color(0xFFF5F5F5))
-            .clickable { onClick() }
+            .clickable(onClick = onClick)
             .padding(16.dp)
     ) {
         Row(
@@ -170,7 +209,6 @@ fun OrderCard(order: Order, onClick: () -> Unit) {
                     )
                 }
             }
-
             Icon(
                 imageVector = Icons.Default.ArrowForward,
                 contentDescription = "Arrow",

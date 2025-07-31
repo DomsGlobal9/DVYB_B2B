@@ -40,7 +40,7 @@ fun InventoryScreen() {
     )
 
     val categoryItems = listOf(
-        StockItem("Sarees", 12, R.drawable.saree),
+        StockItem("Sarees", 12, R.drawable.saree1),
         StockItem("Kids Wear", 8, R.drawable.kidswear),
         StockItem("Mens Wear", 15, R.drawable.menswear),
         StockItem("Lehenga", 6, R.drawable.lehenga),

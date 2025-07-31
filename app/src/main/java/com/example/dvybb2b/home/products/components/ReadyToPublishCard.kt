@@ -35,9 +35,7 @@ fun ReadyToPublishCard( navController: NavController,
                         .weight(1f)
                         .height(48.dp), // Optional: same height for uniform look
                     shape = RoundedCornerShape(10.dp),
-                    onClick = { navController.navigate("product_dress_preview/${selectedDress.name}")
-
-                    }
+                    onClick = { navController.navigate("product_dress_preview/${selectedDress.ProductId}") }
                 ) {
                     Text(text = "Preview", fontWeight = FontWeight.Medium)
                 }

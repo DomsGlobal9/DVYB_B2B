@@ -7,6 +7,8 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -26,16 +28,22 @@ import com.example.dvybb2b.viewmodel.DressPreviewViewModel
 
 @Composable
 fun ProductDressPreview(
-    dressName: String,
+    dressId: String,
     viewModel: DressPreviewViewModel = viewModel()) {
     val dressList = viewModel.dressList
     val selectedDress by viewModel.selectedDress
+    val scrollState = rememberScrollState()
+
+    LaunchedEffect(dressId) {
+        viewModel.loadDressById(dressId)
+    }
 
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.White)
+            .verticalScroll(scrollState)
     ) {
         Spacer(modifier = Modifier.height(32.dp))
         // Top Title Bar
@@ -143,17 +151,21 @@ fun ProductDressPreview(
                 shape = MaterialTheme.shapes.large,
                 colors = ButtonDefaults.buttonColors(containerColor = Color.White)
             ) {
-                Text(text = selectedDress.name, color = Color.Black)
+                selectedDress?.let { dress ->
+                    Text(text = dress.name)
+                }
+
             }
 
             Spacer(modifier = Modifier.height(16.dp))
 
             // Breadcrumb
+            selectedDress?.let { dress ->
             Text(
-                "Category 1 > Dress type > ${selectedDress.name}",
+                "Category 1 > Dress type > ${dress.name}",
                 fontSize = 14.sp,
                 color = Color.DarkGray
-            )
+            )}
 
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -165,16 +177,17 @@ fun ProductDressPreview(
                 verticalAlignment = Alignment.Top
             ) {
                 // Large Main Product Image
+                selectedDress?.let { dress ->
                 Image(
-                    painter = painterResource(id = selectedDress.imageRes),
-                    contentDescription = selectedDress.name,
+                    painter = painterResource(id = dress.imageRes),
+                    contentDescription = dress.name,
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
                         .weight(1f)
                         .height(350.dp)
                         .padding(8.dp)
                         .border(2.dp, Color.LightGray)
-                )
+                )}
 
                 Spacer(modifier = Modifier.width(12.dp))
 

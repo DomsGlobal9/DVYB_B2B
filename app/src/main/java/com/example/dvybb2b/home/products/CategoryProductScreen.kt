@@ -1,7 +1,5 @@
 package com.example.dvybb2b.home.products
 
-import android.content.Context
-import android.graphics.BitmapFactory
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.*
@@ -11,10 +9,9 @@ import androidx.compose.ui.*
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.dvybb2b.model.Product.Product
+import com.example.dvybb2b.model.Product.Products
 import com.example.dvybb2b.utils.loadImageFromAssets
 import com.example.dvybb2b.viewmodel.Products.CategoryProductsViewModel
 
@@ -37,17 +34,17 @@ fun CategoryProductScreen(category: String, viewModel: CategoryProductsViewModel
             verticalArrangement = Arrangement.spacedBy(12.dp),
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            items(products) { product ->
-                ProductCard(product)
+            items(products) { products ->
+                ProductCard(products = products)
             }
         }
     }
 }
 
 @Composable
-fun ProductCard(product: Product) {
+fun ProductCard(products: Products) {
     val context = LocalContext.current
-    val imageBitmap = loadImageFromAssets(context, product.imageAssetPath)
+    val imageBitmap = loadImageFromAssets(context, products.imageAssetPath)
 
     Card(
         modifier = Modifier
@@ -62,7 +59,7 @@ fun ProductCard(product: Product) {
             imageBitmap?.let {
                 Image(
                     bitmap = it,
-                    contentDescription = product.title,
+                    contentDescription = products.title,
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(100.dp),
@@ -70,9 +67,9 @@ fun ProductCard(product: Product) {
                 )
             }
             Spacer(modifier = Modifier.height(6.dp))
-            Text(text = product.title, style = MaterialTheme.typography.bodyMedium)
-            Text(text = product.price, style = MaterialTheme.typography.labelLarge)
-            Text(text = product.reviews, style = MaterialTheme.typography.labelSmall, color = Color.Gray)
+            Text(text = products.title, style = MaterialTheme.typography.bodyMedium)
+            Text(text = products.price, style = MaterialTheme.typography.labelLarge)
+            Text(text = products.reviews, style = MaterialTheme.typography.labelSmall, color = Color.Gray)
         }
     }
 }

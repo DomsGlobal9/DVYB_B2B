@@ -8,6 +8,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
@@ -22,10 +23,21 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PreviewScreen(navController: NavController, viewModel: DressPreviewViewModel = viewModel()) {
+fun PreviewScreen(
+    navController: NavController,
+    productId: String?,
+    viewModel: DressPreviewViewModel = viewModel()
+) {
     val scrollState = rememberScrollState()
-    val selectedDress by viewModel.selectedDress
 
+    // 🟡 Load the product when productId is available
+    LaunchedEffect(productId) {
+        productId?.let {
+            viewModel.loadDressById(it) // Custom function you define in the ViewModel
+        }
+    }
+
+    val selectedDress by viewModel.selectedDress
 
     Column(
         modifier = Modifier
@@ -34,20 +46,6 @@ fun PreviewScreen(navController: NavController, viewModel: DressPreviewViewModel
             .background(Color(0xFFF5F5F5))
             .padding(16.dp)
     ) {
-//        TopAppBar(
-//            title = { Text("DVYB - Vendor") },
-//            navigationIcon = {
-//                IconButton(onClick = { }) {
-//                    Icon(Icons.Default.Menu, contentDescription = "Menu")
-//                }
-//            },
-//            actions = {
-//                IconButton(onClick = { }) {
-//                    Icon(Icons.Default.Notifications, contentDescription = "Notification")
-//                }
-//            }
-//        )
-
         Spacer(modifier = Modifier.height(16.dp))
 
         ProductOverviewCard()
@@ -62,8 +60,11 @@ fun PreviewScreen(navController: NavController, viewModel: DressPreviewViewModel
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        ReadyToPublishCard(navController = navController, selectedDress = selectedDress)
-
+        selectedDress?.let { dress ->
+            ReadyToPublishCard(navController = navController, selectedDress = dress)
+        }
 
     }
 }
+
+

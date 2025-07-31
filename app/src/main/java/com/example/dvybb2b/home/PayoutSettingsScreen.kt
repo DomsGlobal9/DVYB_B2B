@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalMaterial3Api::class)
 
-package com.example.dvybb2b.home.profile.Pages
+package com.example.dvybb2b.home
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*

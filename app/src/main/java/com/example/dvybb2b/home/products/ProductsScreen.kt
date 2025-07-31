@@ -76,7 +76,8 @@ fun ProductsScreen(navController: NavController,viewModel: ProductsViewModel = P
                 modifier = Modifier.fillMaxWidth(),
                 colors = CardDefaults.cardColors(containerColor = Color(0xFFE9F1F4))
             ) {
-                Row(modifier = Modifier.fillMaxWidth(),
+                Row(modifier = Modifier.fillMaxWidth()
+                    .clickable { navController.navigate("totalProducts") },
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                     ) {
@@ -142,10 +143,9 @@ fun ProductsScreen(navController: NavController,viewModel: ProductsViewModel = P
                     }
                 }
             }
-
             Spacer(Modifier.height(10.dp))
             Button(
-                onClick = { /* Handle Add Product */ },
+                onClick = { navController.navigate("is_empty") },
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(8.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0XFF7DBBD1)),

@@ -3,30 +3,22 @@ package com.example.dvybb2b.home.products
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.*
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.example.dvybb2b.R
+import com.example.dvybb2b.home.products.components.ProductScreenHeaderSection
 import com.example.dvybb2b.model.Product.RecentlyAddedProduct
 import com.example.dvybb2b.viewmodel.Products.RecentlyAddedProductsViewModel
 
@@ -40,7 +32,12 @@ fun RecentlyAddedProductsScreen(
     LaunchedEffect(Unit) {
         viewModel.updateGender(gender)
     }
-
+    Column(modifier = Modifier.fillMaxSize()) {
+        ProductScreenHeaderSection(
+            title = "Recently Added",
+            navController = navController,
+            viewModel = viewModel
+        )
 
 
             Spacer(Modifier.height(16.dp))
@@ -57,8 +54,7 @@ fun RecentlyAddedProductsScreen(
                 }
             }
         }
-
-//}
+}
 
 
 @Composable

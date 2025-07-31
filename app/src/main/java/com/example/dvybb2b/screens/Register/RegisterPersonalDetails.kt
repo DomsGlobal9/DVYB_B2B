@@ -21,6 +21,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.dvybb2b.R
+import com.example.dvybb2b.model.register.PersonalDetails
+import com.google.firebase.Firebase
+import com.google.firebase.firestore.firestore
 
 @Composable
 fun RegisterPersonalDetails(navController: NavHostController) {
@@ -129,8 +132,31 @@ fun RegisterPersonalDetails(navController: NavHostController) {
 
             Button(
                 onClick = {
-                    Toast.makeText(context, "Proceeding...", Toast.LENGTH_SHORT).show()
-                    navController.navigate("shopDetails")
+                    val db = Firebase.firestore
+
+                    val personalDetails = PersonalDetails(
+                        name = name,
+                        phone = phone,
+                        state = state,
+                        city = city,
+                        address = address
+                    )
+
+                    if (name.isNotBlank() && phone.length == 10 && state.isNotBlank()) {
+                        db.collection("users")
+                            .document(phone) // using phone as unique ID
+                            .set(personalDetails)
+                            .addOnSuccessListener {
+                                Toast.makeText(context, "Saved Successfully", Toast.LENGTH_SHORT).show()
+                                navController.navigate("shopDetails")
+                            }
+                            .addOnFailureListener { e ->
+                                Toast.makeText(context, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
+                            }
+                    } else {
+                        Toast.makeText(context, "Please fill all required fields", Toast.LENGTH_SHORT).show()
+                    }
+
                 },
                 modifier = Modifier
                     .fillMaxWidth()
