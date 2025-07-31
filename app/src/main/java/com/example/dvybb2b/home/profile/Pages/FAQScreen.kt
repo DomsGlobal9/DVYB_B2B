@@ -19,12 +19,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.myapplication.ui.theme.Support.ViewModel.FAQViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FAQScreen(
     navController: NavController,
-    viewModel: FAQViewModel
+    viewModel: FAQViewModel = viewModel()
 ) {
     Scaffold(
         topBar = {

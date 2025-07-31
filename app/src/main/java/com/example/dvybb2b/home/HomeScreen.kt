@@ -12,7 +12,6 @@ import com.example.dvyb.ui.screens.NotificationScreen
 import com.example.dvyb.ui.theme.components.screens.common.BottomBar
 import com.example.dvyb.ui.theme.components.screens.common.BottomNavItem
 import com.example.dvyb.ui.theme.home.orders.OrdersScreen
-//import com.example.dvyb.ui.theme.home.profile.ProfileScreen
 import com.example.dvyb2b2.ui.dashboard.DashboardScreen
 import com.example.dvybb2b.screens.dashboardComponents.InventoryScreen
 import com.example.dvybb2b.screens.dashboardComponents.TotalRevenueScreen
@@ -24,6 +23,7 @@ import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import com.example.dvyb.ui.theme.home.orders.OrderItemScreen
 import com.example.dvyb.ui.theme.home.orders.OrdersViewModel
+import com.example.dvyb.ui.theme.home.profile.pages.AccountPreferencesScreen
 import com.example.dvybb2b.home.products.AddProductScreen
 import com.example.dvybb2b.home.products.CategoryDetailScreen
 import com.example.dvybb2b.home.products.EmptyScreen
@@ -31,12 +31,16 @@ import com.example.dvybb2b.home.products.PreviewScreen
 import com.example.dvybb2b.home.products.ProductDressPreview
 import com.example.dvybb2b.home.products.ProductsScreen
 import com.example.dvybb2b.home.products.RecentlyAddedProductsScreen
-import com.example.dvybb2b.home.profile.Pages.AccountPreferencesScreen
 import com.example.dvybb2b.home.PayoutSettingsScreen
+import com.example.dvybb2b.home.profile.Pages.FAQScreen
+import com.example.dvybb2b.home.profile.Pages.LiveChatScreen
 import com.example.dvybb2b.home.profile.ProfileScreen
 import com.example.dvybb2b.home.profile.Pages.ShopDetailsScreen
 import com.example.dvybb2b.home.profile.Pages.VendorRegisterScreen
+import com.example.dvybb2b.navigation.SupportScreens
 import com.example.dvybb2b.viewmodel.TotalProductsScreen
+import com.example.myapplication.ui.theme.Support.SupportScreen
+
 
 import kotlinx.coroutines.launch
 
@@ -116,7 +120,7 @@ fun HomeScreen() {
                         val gender = backStackEntry.arguments?.getString("gender") ?: "Women"
                         RecentlyAddedProductsScreen(gender, navController)
                     }
-                    composable("account_preferences") { AccountPreferencesScreen(navController) }
+                    composable("account_preference") { AccountPreferencesScreen() }
                     composable("vendor_register"){ VendorRegisterScreen(navController) }
                     composable("shop_details") { ShopDetailsScreen(navController) }
                     composable("payout_settings"){ PayoutSettingsScreen(navController) }
@@ -141,6 +145,17 @@ fun HomeScreen() {
                             viewModel = viewModel,
                             navController = navController
                         )
+                    }
+                    composable(SupportScreens.Support.route) {
+                        SupportScreen(navController)
+                    }
+
+                    composable(SupportScreens.FAQ.route) {
+                        FAQScreen(navController )
+                    }
+
+                    composable(SupportScreens.LiveChat.route) {
+                        LiveChatScreen(navController)
                     }
                     composable(BottomNavItem.Products.route) {
                         ProductsScreen(navController)

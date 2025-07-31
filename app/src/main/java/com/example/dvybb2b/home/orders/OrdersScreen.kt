@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
@@ -34,7 +35,7 @@ fun OrdersScreen(navController: NavController, viewModel: OrdersViewModel = view
     var searchText by remember { mutableStateOf("") }
     val categories = listOf("All", "Shipped", "Delivered", "Pending", "Canceled")
     val selectedTabIndex = categories.indexOf(selectedCategory).takeIf { it >= 0 } ?: 0
-
+    val interactionSource = remember { MutableInteractionSource() }
     val orders by viewModel.orders.collectAsState()
 
     val filteredOrders = orders.filter { order ->
@@ -61,8 +62,12 @@ fun OrdersScreen(navController: NavController, viewModel: OrdersViewModel = view
             modifier = Modifier
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(12.dp))
+                .border(
+                    width = 1.dp,
+                    color = Color(0XFFB9B9B9))
                 .background(Color(0xFFF5F5F5))
-                .padding(horizontal = 12.dp, vertical = 8.dp)
+                .padding(horizontal = 9.dp, vertical = 16.dp)
+
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Icon(Icons.Default.Search, contentDescription = "Search", tint = Color.Gray)
@@ -74,7 +79,7 @@ fun OrdersScreen(navController: NavController, viewModel: OrdersViewModel = view
                     modifier = Modifier.fillMaxWidth(),
                     decorationBox = { innerTextField ->
                         if (searchText.isEmpty()) {
-                            Text("Search", color = Color.Gray)
+                            Text("Search",fontSize = 24.sp, color = Color.Gray)
                         }
                         innerTextField()
                     }
@@ -82,60 +87,75 @@ fun OrdersScreen(navController: NavController, viewModel: OrdersViewModel = view
             }
         }
 
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(modifier = Modifier.height(24.dp))
 
         Text(
             text = "Your orders",
-            fontSize = 20.sp,
+            fontSize = 24.sp,
             fontWeight = FontWeight.Bold,
             color = Color.Black
         )
 
-        Spacer(modifier = Modifier.height(12.dp))
+        Spacer(modifier = Modifier.height(18.dp))
 
         ScrollableTabRow(
             selectedTabIndex = selectedTabIndex,
-            edgePadding = 16.dp,
+            edgePadding = 4.dp,
+            backgroundColor = Color.Transparent,
             divider = {},
-            indicator = {},
-            backgroundColor = Color.Transparent
+            indicator = {}
         ) {
-            categories.forEachIndexed { _, category ->
+            categories.forEachIndexed { index, category ->
                 val isSelected = selectedCategory == category
+
+                val interactionSource = remember { MutableInteractionSource() }
+
                 Tab(
                     selected = isSelected,
-                    onClick = { selectedCategory = category }
-                )
-                {
-                    Box(
-                        modifier = Modifier
-                            .width(100.dp)
-                            .padding(vertical = 8.dp, horizontal = 4.dp)
-                            .border(
-                                width = 1.dp,
-                                color = Color.Gray, // Add a color here
-                                shape = RoundedCornerShape(6.dp)
+                    onClick = { selectedCategory = category },
+                    interactionSource = interactionSource,
+                    selectedContentColor = Color.White,
+                    unselectedContentColor = Color.Black,
+                    content = {
+                        Box(
+                            modifier = Modifier
+                                .padding(horizontal = 4.dp, vertical = 8.dp)
+                                .border(
+                                    width = 1.dp,
+                                    color = when {
+                                        isSelected && category == "Canceled" -> Color.Red
+                                        isSelected -> Color(0xFF7DBBD1)
+                                        else -> Color(0xFFB9B9B9)
+                                    },
+                                    shape = RoundedCornerShape(8.dp)
+                                )
+                                .clip(RoundedCornerShape(8.dp))
+                                .background(
+                                    color = when {
+                                        isSelected && category == "Canceled" -> Color.Red
+                                        isSelected -> Color(0xFF7DBBD1)
+                                        else -> Color.White
+                                    }
+                                )
+                                .padding(
+                                    horizontal = if (isSelected && category == "All") 24.dp else 18.dp,
+                                    vertical = 12.dp
+                                )
+                        ) {
+                            Text(
+                                text = category,
+                                color = if (isSelected) Color.White else Color.Black,
+                                fontSize = 14.sp,
+                                maxLines = 1
                             )
-                            .clip(RoundedCornerShape(6.dp))
-                            .background(
-                                when {
-                                    isSelected && category == "Canceled" -> Color.Red
-                                    (isSelected) ->Color(0xFF7DBBD1)
-                                    else -> Color(0xFFFFFFFF)
-                                }
-                            )
-                            .padding(horizontal = 12.dp, vertical = 6.dp)
-                    ) {
-                        Text(
-                            text = category,
-                            color = if (isSelected) Color.White else Color.Black,
-                            fontSize = 14.sp,
-                            maxLines = 1
-                        )
+                        }
                     }
-                }
+                )
+
+
             }
         }
+
 
         Spacer(modifier = Modifier.height(16.dp))
 
@@ -161,7 +181,7 @@ fun OrdersScreen(navController: NavController, viewModel: OrdersViewModel = view
                     Image(
                         painter = painterResource(id = R.drawable.order_empty_fallback),
                         contentDescription = "Empty orders",
-                        modifier = Modifier.size(340.dp),
+                        modifier = Modifier.size(150.dp),
                         contentScale = ContentScale.Fit
                     )
                 }
@@ -194,17 +214,17 @@ fun OrderCard(order: Order, onClick: () -> Unit) {
             modifier = Modifier.fillMaxWidth()
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(
-                    imageVector = Icons.Default.List,
-                    contentDescription = "Order icon",
-                    tint = Color.Black
+                Image(
+                    painter = painterResource(R.drawable.ordericon),
+                    contentDescription = "order",
+                    modifier = Modifier.size(24.dp)
                 )
                 Spacer(modifier = Modifier.width(12.dp))
                 Column {
                     Text(text = "Order #${order.orderId}", fontWeight = FontWeight.SemiBold)
                     Text(
                         text = "${order.itemCount} item${if (order.itemCount > 1) "s" else ""}",
-                        fontSize = 13.sp,
+                        fontSize = 15.sp,
                         color = Color.Gray
                     )
                 }

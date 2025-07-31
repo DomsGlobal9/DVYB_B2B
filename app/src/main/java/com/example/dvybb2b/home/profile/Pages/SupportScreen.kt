@@ -1,7 +1,5 @@
 package com.example.myapplication.ui.theme.Support
 
-
-
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -17,17 +15,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.dvybb2b.R
-
-
-import com.example.myapplication.ui.theme.Support.ViewModel.SupportViewModel
-import com.example.myapplication.ui.theme.navigations.SupportScreens
+import com.example.dvybb2b.navigation.SupportScreens
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SupportScreen(
     navController: NavController,
-    viewModel: SupportViewModel
+
 ) {
     Scaffold(
         topBar = {
@@ -46,7 +41,7 @@ fun SupportScreen(
             modifier = Modifier
                 .padding(paddingValues)
                 .fillMaxSize()
-                .padding(16.dp)
+                .padding(top = 8.dp, bottom = 16.dp)
         ) {
             SupportOptionCard(
                 title = "FAQ",

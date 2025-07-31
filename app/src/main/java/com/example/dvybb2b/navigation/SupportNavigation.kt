@@ -1,4 +1,4 @@
-package com.example.myapplication.ui.theme.navigations
+package com.example.dvybb2b.navigation
 
 
 sealed class SupportScreens(val route: String) {

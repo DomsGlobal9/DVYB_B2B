@@ -24,7 +24,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.example.dvybb2b.home.profile.Pages.AccountPreferencesScreen
+import com.example.dvybb2b.navigation.SupportScreens
 
 @Composable
 fun ProfileScreen(navController: NavController, viewModel: ProfileViewModel = viewModel()) {
@@ -107,7 +107,7 @@ fun ProfileScreen(navController: NavController, viewModel: ProfileViewModel = vi
                     color = Color.Black.copy(alpha = 0.2f),
                     shape = RoundedCornerShape(12.dp)
                 )
-                .clickable { navController.navigate("account_preferences")  }
+                .clickable { navController.navigate("account_preference")  }
                 .padding(16.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
@@ -229,7 +229,7 @@ fun ProfileScreen(navController: NavController, viewModel: ProfileViewModel = vi
                 )
                 .padding(horizontal = 16.dp)
                 .background(Color.White, RoundedCornerShape(12.dp))
-                .clickable { /* Handle navigation */ }
+                .clickable { navController.navigate(SupportScreens.Support.route) }
                 .padding(16.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically

@@ -1,7 +1,8 @@
-package com.example.dvybb2b.model.register
+package com.example.dvybb2b.viewmodel.register.model
 
 
-data class PersonalDetails(
+data class Vendor(
+    val vendorId: String = "",
     val name: String = "",
     val phone: String = "",
     val state: String = "",

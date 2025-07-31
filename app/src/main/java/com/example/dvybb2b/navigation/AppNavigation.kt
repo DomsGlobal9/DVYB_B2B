@@ -16,10 +16,10 @@ import com.example.dvybb2b.screens.dashboardComponents.InventoryScreen
 import com.example.dvybb2b.screens.OtpEntryScreen
 import com.example.dvybb2b.screens.Register.RegisterBankDetailsScreen
 import com.example.dvybb2b.screens.Register.RegisterPasswordScreen
+import com.example.dvybb2b.screens.Register.RegisterPersonalDetails
 import com.example.dvybb2b.screens.login.LoginScreen
 import com.example.dvybb2b.screens.login.OtpScreen
 import com.example.dvybb2b.ui.theme.screens.onboarding.OnboardingScreen
-import com.example.dvybb2b.ui.theme.screens.register.RegisterPersonalDetails
 import com.example.dvybb2b.ui.theme.screens.register.RegisterShopDetailsScreen
 
 

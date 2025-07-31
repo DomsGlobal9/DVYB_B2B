@@ -34,10 +34,6 @@ import com.example.dvybb2b.R
 
 @Composable
 fun RegisterPasswordScreen(navController: NavController) {
-    var password by remember { mutableStateOf("") }
-    var confirmPassword by remember { mutableStateOf("") }
-    var isPasswordVisible by remember { mutableStateOf(false) }
-    var isConfirmPasswordVisible by remember { mutableStateOf(false) }
     var otpNumber by remember { mutableStateOf("9102345678") }
     var isTermsAccepted by remember { mutableStateOf(true) }
     var isOtpDropdownExpanded by remember { mutableStateOf(false) }
@@ -55,14 +51,6 @@ fun RegisterPasswordScreen(navController: NavController) {
         ) {
             RegistrationCard(
                 navController = navController,
-                password = password,
-                onPasswordChange = { password = it },
-                confirmPassword = confirmPassword,
-                onConfirmPasswordChange = { confirmPassword = it },
-                isPasswordVisible = isPasswordVisible,
-                onPasswordVisibilityChange = { isPasswordVisible = it },
-                isConfirmPasswordVisible = isConfirmPasswordVisible,
-                onConfirmPasswordVisibilityChange = { isConfirmPasswordVisible = it },
                 otpNumber = otpNumber,
                 onOtpNumberChange = { otpNumber = it },
                 isOtpDropdownExpanded = isOtpDropdownExpanded,
@@ -142,14 +130,6 @@ fun CustomInputField(
 @Composable
 fun RegistrationCard(
     navController: NavController,
-    password: String,
-    onPasswordChange: (String) -> Unit,
-    confirmPassword: String,
-    onConfirmPasswordChange: (String) -> Unit,
-    isPasswordVisible: Boolean,
-    onPasswordVisibilityChange: (Boolean) -> Unit,
-    isConfirmPasswordVisible: Boolean,
-    onConfirmPasswordVisibilityChange: (Boolean) -> Unit,
     otpNumber: String,
     onOtpNumberChange: (String) -> Unit,
     isOtpDropdownExpanded: Boolean,
@@ -177,23 +157,8 @@ fun RegistrationCard(
             Spacer(modifier = Modifier.height(30.dp))
             StepIndicator(stepNumber = "4", stepTitle = "Password")
             Spacer(modifier = Modifier.height(20.dp))
-            CustomInputField(
-                value = password,
-                onValueChange = onPasswordChange,
-                label = "Enter password",
-                isPassword = true,
-                isVisible = isPasswordVisible,
-                onVisibilityToggle = { onPasswordVisibilityChange(!isPasswordVisible) }
-            )
-            Spacer(modifier = Modifier.height(10.dp))
-            CustomInputField(
-                value = confirmPassword,
-                onValueChange = onConfirmPasswordChange,
-                label = "Re-Enter password",
-                isPassword = true,
-                isVisible = isConfirmPasswordVisible,
-                onVisibilityToggle = { onConfirmPasswordVisibilityChange(!isConfirmPasswordVisible) }
-            )
+
+
             Spacer(modifier = Modifier.height(10.dp))
             OtpSection(
                 otpNumber = otpNumber,

@@ -1,4 +1,5 @@
-package com.example.dvybb2b.ui.theme.screens.register
+
+package com.example.dvybb2b.screens.Register
 
 import android.widget.Toast
 import androidx.compose.foundation.Image
@@ -19,25 +20,42 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.dvybb2b.R
-import com.example.dvybb2b.model.register.PersonalDetails
-import com.google.firebase.Firebase
-import com.google.firebase.firestore.firestore
+import com.example.dvybb2b.viewmodel.register.RegisterViewModel
+
 
 @Composable
-fun RegisterPersonalDetails(navController: NavHostController) {
+fun RegisterPersonalDetails(
+    navController: NavHostController,
+    viewModel: RegisterViewModel = viewModel()
+) {
+
     val context = LocalContext.current
 
-    var name by remember { mutableStateOf("") }
-    var phone by remember { mutableStateOf("") }
-    var state by remember { mutableStateOf("") }
-    var city by remember { mutableStateOf("") }
-    var address by remember { mutableStateOf("") }
+    val name by viewModel.name.collectAsState()
+    val phone by viewModel.phone.collectAsState()
+    val state by viewModel.state.collectAsState()
+
+    val city by viewModel.city.collectAsState()
+    val address by viewModel.address.collectAsState()
 
     var expanded by remember { mutableStateOf(false) }
-    val stateList = listOf("Andhra Pradesh", "Karnataka", "Tamil Nadu", "Telangana", "Kerala")
+//    val stateList = listOf("Andhra Pradesh", "Karnataka", "Tamil Nadu", "Telangana", "Kerala")
+    val allStates = listOf(
+        "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh", "Goa",
+        "Gujarat", "Haryana", "Himachal Pradesh", "Jharkhand", "Karnataka", "Kerala",
+        "Madhya Pradesh", "Maharashtra", "Manipur", "Meghalaya", "Mizoram", "Nagaland",
+        "Odisha", "Punjab", "Rajasthan", "Sikkim", "Tamil Nadu", "Telangana", "Tripura",
+        "Uttar Pradesh", "Uttarakhand", "West Bengal", "Andaman and Nicobar Islands",
+        "Chandigarh", "Dadra and Nagar Haveli and Daman and Diu", "Delhi",
+        "Jammu and Kashmir", "Ladakh", "Lakshadweep", "Puducherry"
+    )
 
+    val filteredStates = remember(state) {
+        if (state.isBlank()) allStates
+        else allStates.filter { it.startsWith(state, ignoreCase=true)}}
     Box(modifier = Modifier.fillMaxSize()) {
         // Background Image
         Image(
@@ -59,7 +77,6 @@ fun RegisterPersonalDetails(navController: NavHostController) {
         ) {
             Spacer(modifier = Modifier.height(32.dp))
 
-            // Logo
             Image(
                 painter = painterResource(id = R.drawable.logo),
                 contentDescription = "Logo",
@@ -75,10 +92,7 @@ fun RegisterPersonalDetails(navController: NavHostController) {
             )
 
             Spacer(modifier = Modifier.height(16.dp))
-
-            // Step Progress Bar
             StepIndicator()
-
             Spacer(modifier = Modifier.height(16.dp))
 
             Text(
@@ -91,72 +105,75 @@ fun RegisterPersonalDetails(navController: NavHostController) {
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            UnderlinedTextField(value = name, onValueChange = { name = it }, label = "Enter Your full name")
+            UnderlinedTextField(value = name, onValueChange = viewModel::onNameChange, label = "Enter Your full name")
             Spacer(modifier = Modifier.height(12.dp))
-            UnderlinedTextField(value = phone, onValueChange = { phone = it }, label = "Enter 10 digit mobile number")
+
+            UnderlinedTextField(value = phone, onValueChange = viewModel::onPhoneChange, label = "Enter 10 digit mobile number")
             Spacer(modifier = Modifier.height(12.dp))
 
             // State Dropdown
+
             Box(modifier = Modifier.fillMaxWidth()) {
                 UnderlinedTextField(
                     value = state,
-                    onValueChange = {},
-                    label = "Select State",
-                    readOnly = true,
-                    trailingIcon = { Icon(Icons.Default.ArrowDropDown, contentDescription = null) },
+                    onValueChange = {
+                        viewModel.onStateChange(it)
+                        expanded = true
+                    },
+                    label = "State",
+                    trailingIcon = {
+                        Icon(
+                            imageVector = Icons.Default.ArrowDropDown,
+                            contentDescription = "Dropdown",
+                            modifier = Modifier.clickable { expanded = true }
+                        )
+                    },
                     onClick = { expanded = true }
                 )
 
                 DropdownMenu(
-                    expanded = expanded,
-                    onDismissRequest = { expanded = false }
+                    expanded = expanded && filteredStates.isNotEmpty(),
+                    onDismissRequest = { expanded = false },
+                    modifier = Modifier
+                        .background(Color.White)
+                        .fillMaxWidth(0.95f)
                 ) {
-                    stateList.forEach {
+                    filteredStates.forEach {
                         DropdownMenuItem(
-                            text = { Text(it) },
                             onClick = {
-                                state = it
+                                viewModel.onStateChange(it)
                                 expanded = false
+                            },
+                            text = {
+                                Text(
+                                    text = it,
+                                    color = Color.Black,
+                                    fontSize = 14.sp
+                                )
                             }
                         )
                     }
                 }
             }
 
+
             Spacer(modifier = Modifier.height(12.dp))
-            UnderlinedTextField(value = city, onValueChange = { city = it }, label = "City")
+            UnderlinedTextField(value = city, onValueChange = viewModel::onCityChange, label = "City")
             Spacer(modifier = Modifier.height(12.dp))
-            UnderlinedTextField(value = address, onValueChange = { address = it }, label = "Address")
+            UnderlinedTextField(value = address, onValueChange = viewModel::onAddressChange, label = "Address")
 
             Spacer(modifier = Modifier.height(24.dp))
 
             Button(
                 onClick = {
-                    val db = Firebase.firestore
-
-                    val personalDetails = PersonalDetails(
-                        name = name,
-                        phone = phone,
-                        state = state,
-                        city = city,
-                        address = address
-                    )
-
-                    if (name.isNotBlank() && phone.length == 10 && state.isNotBlank()) {
-                        db.collection("users")
-                            .document(phone) // using phone as unique ID
-                            .set(personalDetails)
-                            .addOnSuccessListener {
-                                Toast.makeText(context, "Saved Successfully", Toast.LENGTH_SHORT).show()
-                                navController.navigate("shopDetails")
-                            }
-                            .addOnFailureListener { e ->
-                                Toast.makeText(context, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
-                            }
-                    } else {
-                        Toast.makeText(context, "Please fill all required fields", Toast.LENGTH_SHORT).show()
+                    viewModel.saveVendorToFirebase { success ->
+                        if (success) {
+                            Toast.makeText(context, "Vendor saved successfully", Toast.LENGTH_SHORT).show()
+                            navController.navigate("shopDetails")
+                        } else {
+                            Toast.makeText(context, "Failed to save vendor", Toast.LENGTH_SHORT).show()
+                        }
                     }
-
                 },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -187,13 +204,13 @@ fun RegisterPersonalDetails(navController: NavHostController) {
 fun StepIndicator() {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
-        modifier = Modifier.fillMaxWidth(0.7f)
+        modifier = Modifier.fillMaxWidth(1f)
     ) {
-        listOf(0xFF008CBD, 0xFFB0BEC5, 0xFFB0BEC5).forEach { colorHex ->
+        listOf(0xFF008CBD, 0xFFB0BEC5, 0xFFB0BEC5,0xFFB0BEC5).forEach { colorHex ->
             Box(
                 modifier = Modifier
-                    .height(3.dp)
-                    .weight(1f)
+                    .height(4.dp)
+                    .weight(2f)
                     .background(Color(colorHex))
             )
             Spacer(modifier = Modifier.width(4.dp))
